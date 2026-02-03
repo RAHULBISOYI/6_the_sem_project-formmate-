@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-links">
+      <a href="/index.html/index.html">Home</a>
+      
+      <a href="/navbar/about.html">About</a>
+     <a href="/navbar/contact.html">Contact</a>
+
+    </div>
+    <div class="divider"></div>
+    <div class="square">
+       <div>
+        <a href="/email_auth/sign.html" class="sign-in-btn">Sign Up</a>
+      </div>
+      </div>
+    <div class="signup">
+      <div>
+        <a href="/email_auth/login.html" class="sign-in-btn">Sign In</a>
+      </div>
+      <p>Already have an account?</p>
+    </div>
+    <div class="lago">📋FormMate</div>
+
+  </nav>
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+ 
+<div class="card-wrapper">
+  <!-- USER CARD -->
+ <div class="card card-big user-card" id="uploadCard">
+  <h3>Upload your document</h3>
+</div>
+<div class="upload-box" id="uploadDiv">
+  <p>Upload your document</p>
+
+  <form id="uploadForm">
+    <!-- Document name input -->
+    <input
+      type="text"
+      name="name"
+      class="doc-input"
+      placeholder="Enter document name"
+      required
+    />
+
+    <!-- File upload area -->
+    <div class="drop-area" id="dropArea">
+      <div class="plus">+</div>
+      <p id="fileText">Drop PDF</p>
+
+      <button type="button" class="browse-btn" id="browseBtn">
+        Open File
+      </button>
+
+      <input
+        type="file"
+        id="fileInput"
+        name="file"
+        accept="application/pdf"
+        hidden
+        required
+      />
+    </div>
+
+    <button type="submit" class="upload-btn">Upload</button>
+  </form>
+</div>
+
+
+<script>
+  document.getElementById("uploadCard").addEventListener("click", function () {
+    document.getElementById("uploadDiv").style.display = "block";
+  });
+</script>
+<script>
+  document.getElementById("browseBtn").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+  });
+</script>
+
+
+
+
+
+
+
+
+<div class="card card-small card-nav" onclick="window.location.href='http://localhost:3000/view.html'" style="cursor: pointer;">
+  <h4>Document Center</h4>
+</div>
+
+
+
+
+ <div id="imagefill">
+    <img src="fill.jpeg" alt="DNA banner">
+  </div>
+  </aside>
+
+
+
+
+ <script src="script.js"></script>
+
+</body>
+</html>

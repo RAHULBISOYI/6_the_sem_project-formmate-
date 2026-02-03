@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Firebase Email Auth</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input {
+      padding: 8px;
+      width: 250px;
+      margin: 4px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1e40af;
+    }
+    h2 {
+      margin-top: 20px;
+      color: #111827;
+    }
+  </style>
+</head>
+<body>
+  <h2>Sign Up</h2>
+  <input id="signupEmail" type="email" placeholder="Email" />
+  <input id="signupPassword" type="password" placeholder="Password" />
+  <button id="btnSignup">Sign Up</button>
+
+  <h2>Login</h2>
+  <input id="loginEmail" type="email" placeholder="Email" />
+  <input id="loginPassword" type="password" placeholder="Password" />
+  <button id="btnLogin">Log In</button>
+
+  <h2>Other</h2>
+  <button id="btnLogout">Logout</button>
+  <button id="btnReset">Reset Password</button>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    sendPasswordResetEmail,
+    sendEmailVerification,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+  // Initialize Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyB7tmC5m9MP6ypb_TsRxo6zqVAMOXwXR2M",
+    authDomain: "mywebapp-160ce.firebaseapp.com",
+    projectId: "mywebapp-160ce",
+    storageBucket: "mywebapp-160ce.firebasestorage.app",
+    messagingSenderId: "809413811053",
+    appId: "1:809413811053:web:b5347ad9c250fad6e9d864",
+    measurementId: "G-ZYMQHP0WPC"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+    // 🧩 SIGNUP
+    document.getElementById('btnSignup').addEventListener('click', async () => {
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(userCred.user);
+           const user = auth.currentUser;
+    console.log("Email Verified:", user.emailVerified);
+
+        alert('Signup successful! Verification email sent. Please check your inbox.');
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    // 🧩 LOGIN
+   document.getElementById('btnLogin').addEventListener('click', async () => {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  try {
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    const user = auth.currentUser;
+    console.log("Email Verified:", user.emailVerified);
+
+    if (!user.emailVerified) {
+      alert('Your email is not verified. Check your inbox or spam folder.');
+
+      // Optional: show a prompt to resend verification
+      if (confirm('Do you want to resend the verification email?')) {
+        await sendEmailVerification(user);
+        alert('Verification email resent. Check your inbox or spam folder.');
+      }
+
+      return; // stop further login
+    }
+
+    alert('Login successful!');
+    // proceed to your protected page or UI
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+
+    // 🧩 LOGOUT
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      await signOut(auth);
+      alert('You have been logged out.');
+    });
+
+    // 🧩 RESET PASSWORD
+    document.getElementById('btnReset').addEventListener('click', async () => {
+      const email =
+        document.getElementById('loginEmail').value ||
+        document.getElementById('signupEmail').value;
+
+      if (!email) {
+        alert('Please enter your email first.');
+        return;
+      }
+
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert('Password reset email sent! Please check your inbox.');
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    // 🧩 AUTH STATE LISTENER
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("User logged in:", user.email);
+      } else {
+        console.log("No user logged in");
+      }
+    });
+  </script>
+</body>
+</html>

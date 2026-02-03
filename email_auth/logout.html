@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Logout</title>
+  <style>
+    body {
+      font-family: Arial;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f3f4f6;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background: #dc2626;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 15px;
+    }
+    button:hover {
+      background: #b91c1c;
+    }
+    h2 {
+      color: #111827;
+    }
+  </style>
+</head>
+<body>
+  <h2>You are logged in</h2>
+  <p>Click below to logout from your account.</p>
+  <button id="btnLogout">Logout</button>
+
+  <script type="module">
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7tmC5m9MP6ypb_TsRxo6zqVAMOXwXR2M",
+      authDomain: "mywebapp-160ce.firebaseapp.com",
+      projectId: "mywebapp-160ce",
+      storageBucket: "mywebapp-160ce.firebasestorage.app",
+      messagingSenderId: "809413811053",
+      appId: "1:809413811053:web:b5347ad9c250fad6e9d864",
+      measurementId: "G-ZYMQHP0WPC"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Logout logic
+    document.getElementById('btnLogout').addEventListener('click', async () => {
+      try {
+        await signOut(auth);
+        localStorage.removeItem("loggedIn");
+        alert('You have been logged out successfully.');
+        window.location.href = "/login.html"; // Redirect back to login page
+      } catch (error) {
+        alert('Error during logout: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>

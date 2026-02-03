@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D-SPAN DNA Analyzer</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <link rel="stylesheet" href="firstpage.css">
+
+ 
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-links">
+      <a href="/index.html/index.html">Home</a>
+      
+      <a href="/navbar/about.html">About</a>
+     <a href="/navbar/contact.html">Contact</a>
+
+    </div>
+    <div class="divider"></div>
+    <div class="square">
+       <div>
+        <a href="/email_auth/sign.html" class="sign-in-btn">Sign Up</a>
+      </div>
+      </div>
+    <div class="signup">
+      <div>
+        <a href="/email_auth/login.html" class="sign-in-btn">Sign In</a>
+      </div>
+      <p>Already have an account?</p>
+    </div>
+    <div class="lago">📋FormMate</div>
+
+  </nav>
+
+  <div id="blr">
+
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+ 
+<div class="card-wrapper">
+  <!-- USER CARD -->
+  <div class="card card-big user-card" data-href="profile.html">
+    <div class="user-icon">
+      <i class="fa-regular fa-user"></i>
+    </div>
+    <p class="user-name" id="userName">Loading...</p>
+  </div>
+
+  <!-- FIREBASE + LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    // 🔑 Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7tmC5m9MP6ypb_TsRxo6zqVAMOXwXR2M",
+      authDomain: "mywebapp-160ce.firebaseapp.com",
+      projectId: "mywebapp-160ce",
+      appId: "1:809413811053:web:b5347ad9c250fad6e9d864"
+    };
+
+    // 🔥 Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // 🔐 Load user name
+    onAuthStateChanged(auth, (user) => {
+      const nameEl = document.getElementById("userName");
+
+      if (!user) {
+        nameEl.textContent = "Guest";
+        return;
+      }
+
+      nameEl.textContent =
+        user.displayName || user.email.split("@")[0];
+    });
+  </script>
+<script>
+  document.querySelector(".user-card").addEventListener("click", function () {
+    window.location.href = this.dataset.href;
+  });
+</script>
+
+
+  <!-- LOWER CARDS -->
+<div class="card card-small card-nav" data-href="/documet_store/index.html">
+  <h4>Document Center</h4>
+</div>
+
+<div class="card card-small card-nav" data-href="info.html">
+  <h4>My Files</h4>
+</div>
+
+
+
+ <div id="imagefill">
+    <img src="fill.jpeg" alt="DNA banner">
+  </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+  <h2>AI-Powered Form Filling</h2>
+<p2>
+  Upload your document or enter basic details, and our AI will automatically
+ <br> extract the required information to help you complete forms faster,
+  accurately, and with less effort.
+</p2>
+
+    <div class="upload-box" id="dropArea">
+      <div class="plus">+</div>
+      <p>Drop File</p>
+
+      <button type="button" class="browse-btn" id="browseBtn">Open File</button>
+
+      <input type="file" id="fileInput" hidden>
+    </div>
+   
+  </main>
+
+</div>
+
+
+<script src="script2.js"></script>
+<!------ Navigation Card Script -->
+<script>
+  document.querySelectorAll(".card-nav").forEach(card => {
+    card.addEventListener("click", function () {
+      window.location.href = this.dataset.href;
+    });
+  });
+</script>
+
+
+<footer class="site-footer">
+  <div class="footer-links">
+    <a href="#">About us</a>
+    <a href="#">Contact us</a>
+    <a href="#">Privacy Policy</a>
+    <a href="#">Your Privacy Choices</a>
+    <a href="#">Terms of Use</a>
+  </div>
+  <hr>
+  <div class="footer-info">
+    <p>&copy; 2026 Marketing VF Ltd. All Rights Reserved.</p>
+    
+  </div>
+</footer>
+
+  </div>
+
+  <!-- Scroll Reveal Script -->
+  <script>
+    function revealOnScroll() {
+      document.querySelectorAll('.scroll-reveal').forEach(el => {
+        if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+          el.classList.add('show');
+        }
+      });
+    }
+    window.addEventListener('scroll', revealOnScroll);
+    window.addEventListener('load', revealOnScroll);
+  </script>
+
+</body>
+</html>

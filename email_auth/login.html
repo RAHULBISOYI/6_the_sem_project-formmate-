@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <style>
+    body { font-family: Arial; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; background:#f3f4f6; }
+    input { padding:8px; width:250px; margin:4px 0; border-radius:6px; border:1px solid #ccc; }
+    button { padding:8px 16px; border:none; border-radius:6px; background:#2563eb; color:white; cursor:pointer; }
+    button:hover { background:#1e40af; }
+  </style>
+</head>
+<body>
+  <h2>Login</h2>
+  <input type="email" id="loginEmail" placeholder="Email" />
+  <input type="password" id="loginPassword" placeholder="Password" />
+  <button id="btnLogin">Login</button>
+  <button id="btnReset">Reset Password</button>
+  <p>Don't have an account? <a href="/email_auth/sign.html">Sign Up</a></p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7tmC5m9MP6ypb_TsRxo6zqVAMOXwXR2M",
+      authDomain: "mywebapp-160ce.firebaseapp.com",
+      projectId: "mywebapp-160ce",
+      storageBucket: "mywebapp-160ce.firebasestorage.app",
+      messagingSenderId: "809413811053",
+      appId: "1:809413811053:web:b5347ad9c250fad6e9d864",
+      measurementId: "G-ZYMQHP0WPC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      try {
+        const userCred = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCred.user;
+
+        if (!user.emailVerified) {
+          alert('Your email is not verified.');
+          if (confirm('Resend verification email?')) {
+            await sendEmailVerification(user);
+            alert('Verification email sent. Check inbox or spam.');
+          }
+          await signOut(auth);
+          return;
+        }
+
+        // ✅ Mark login success
+        localStorage.setItem("loggedIn", "true");
+        alert('Login successful!');
+        window.location.href = "/index.html/index.html"; // go back to home
+
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    document.getElementById('btnReset').addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value;
+      if (!email) return alert('Enter your email first');
+      try {
+        await sendPasswordResetEmail(auth, email);
+        alert('Password reset email sent!');
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  </script>
+</body>
+</html>

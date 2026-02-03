@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Signup - Firebase Auth</title>
+  <style>
+    body { font-family: Arial; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:10px; background:#f3f4f6; }
+    input { padding:8px; width:250px; border-radius:6px; border:1px solid #ccc; margin:4px 0; }
+    button { padding:8px 16px; border:none; border-radius:6px; background:#2563eb; color:white; cursor:pointer; }
+    button:hover { background:#1e40af; }
+  </style>
+</head>
+<body>
+  <h2>Sign Up</h2>
+  <input type="email" id="signupEmail" placeholder="Email" />
+  <input type="password" id="signupPassword" placeholder="Password" />
+  <button id="btnSignup">Sign Up</button>
+  <p>Already have an account? <a href="login.html">Login here</a></p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7tmC5m9MP6ypb_TsRxo6zqVAMOXwXR2M",
+      authDomain: "mywebapp-160ce.firebaseapp.com",
+      projectId: "mywebapp-160ce",
+      storageBucket: "mywebapp-160ce.firebasestorage.app",
+      messagingSenderId: "809413811053",
+      appId: "1:809413811053:web:b5347ad9c250fad6e9d864",
+      measurementId: "G-ZYMQHP0WPC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById('btnSignup').addEventListener('click', async () => {
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+
+      try {
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        await sendEmailVerification(userCred.user);
+        alert('Signup successful! Verification email sent. Check inbox or spam.');
+        document.getElementById('signupEmail').value = '';
+        document.getElementById('signupPassword').value = '';
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+  </script>
+</body>
+</html>

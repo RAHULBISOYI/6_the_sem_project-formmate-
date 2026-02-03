@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Account</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .account-card {
+      background: white;
+      width: 340px;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .account-card img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #2563eb;
+      cursor: pointer;
+    }
+
+    .name {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 12px;
+    }
+
+    .email {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 18px;
+      word-break: break-all;
+    }
+
+    /* hide file input */
+    input[type="file"] {
+      display: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #ef4444;
+      border: none;
+      color: white;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #dc2626;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="account-card">
+    <!-- click image to upload -->
+    <label for="photoInput">
+      <img id="userPhoto" src="https://i.imgur.com/6VBx3io.png" alt="User Photo">
+    </label>
+
+    <div class="name" id="userName">Loading...</div>
+    <div class="email" id="userEmail"></div>
+
+    <input type="file" id="photoInput" accept="image/*">
+
+    <button id="btnLogout">Logout</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+    import {
+      getStorage,
+      ref,
+      uploadBytes,
+      getDownloadURL
+    } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-storage.js";
+
+    // 🔑 Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyB7tmC5m9MP6ypb_TsRxo6zqVAMOXwXR2M",
+      authDomain: "mywebapp-160ce.firebaseapp.com",
+      projectId: "mywebapp-160ce",
+      storageBucket: "mywebapp-160ce.appspot.com",
+      messagingSenderId: "809413811053",
+      appId: "1:809413811053:web:b5347ad9c250fad6e9d864"
+    };
+
+    // 🔥 Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const storage = getStorage(app);
+
+    // 🔐 Auth state
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "/email_auth/login.html";
+        return;
+      }
+
+      document.getElementById("userName").textContent =
+        user.displayName || "No Name";
+
+      document.getElementById("userEmail").textContent = user.email;
+
+      document.getElementById("userPhoto").src =
+        user.photoURL || "https://i.imgur.com/6VBx3io.png";
+    });
+
+    // 📸 Upload photo
+    document.getElementById("photoInput").addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const user = auth.currentUser;
+      if (!user) return;
+
+      if (file.size > 2 * 1024 * 1024) {
+        alert("Image must be smaller than 2MB");
+        return;
+      }
+
+      try {
+        const photoRef = ref(storage, `user_photos/${user.uid}`);
+        await uploadBytes(photoRef, file);
+
+        const photoURL = await getDownloadURL(photoRef);
+
+        await updateProfile(user, { photoURL });
+
+        // 🔄 IMPORTANT: refresh user
+        await user.reload();
+
+        document.getElementById("userPhoto").src =
+          auth.currentUser.photoURL;
+
+        alert("Profile photo updated successfully");
+      } catch (error) {
+        console.error(error);
+        alert("Photo upload failed");
+      }
+    });
+
+    // 🚪 Logout
+    document.getElementById("btnLogout").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/email_auth/login.html";
+    });
+  </script>
+
+</body>
+</html>
