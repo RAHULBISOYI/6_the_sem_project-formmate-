@@ -184,3 +184,11 @@ This project presents an innovative and practical solution to assist senior citi
 
 ---
 
+
+work flow after the upload th eform 
+1️⃣ OCR implementation (GridFS → text)
+2️⃣ RAG prompt that extracts fields reliably
+3️⃣ MongoDB schema for form definitions
+4️⃣ Handling checkboxes & tables
+5️⃣ Full end-to-end controller code
+
